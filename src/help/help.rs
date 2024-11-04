@@ -28,13 +28,4 @@ impl Help {
             chunk
         )
     }
-
-    // fn for_add_task(frame: &mut Frame, chunk: Rect) {
-    //     frame.render_widget(
-    //         Paragraph::new(format!("esc: Close | enter: Submit the task"))
-    //             .block(Block::default().title_alignment(Alignment::Center).title("Commands").borders(Borders::all()))
-    //             .centered(),
-    //         chunk
-    //     )
-    // }
 }

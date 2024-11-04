@@ -1,7 +1,7 @@
 use ratatui::{
     layout::{Alignment, Rect},
     style::{Color, Style, Stylize},
-    widgets::{Block, Borders, List, ListState, ListDirection, Paragraph},
+    widgets::{Clear, Block, Borders, List, ListState, ListDirection, Paragraph},
     Frame
 };
 
@@ -27,6 +27,7 @@ impl AllCategory {
     }
 
     pub fn render_all_category(&mut self, frame: &mut Frame, chunk: Rect) {
+        frame.render_widget(Clear, chunk);
         frame.render_stateful_widget(
             List::new(self.names.clone())
                 .block(Block::default().title_alignment(Alignment::Center).title("All Category").borders(Borders::all()))
@@ -38,11 +39,11 @@ impl AllCategory {
         );
     }
 
-    pub fn get_current_name(&mut self) -> String {
+    pub fn get_current_name(&mut self) -> Option<String> {
         if let Some(i) = self.state.selected() {
-            self.names[i].clone()
+            Some(self.names[i].clone())
         } else {
-            "".to_string()
+            None
         }
     }
 

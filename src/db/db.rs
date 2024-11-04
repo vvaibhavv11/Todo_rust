@@ -1,4 +1,4 @@
-use rusqlite::{params, Connection, Result, Error};
+use rusqlite::{Connection, Result, Error};
 use std::{fs, path::PathBuf};
 
 pub fn connection() -> Result<Connection, Error> {

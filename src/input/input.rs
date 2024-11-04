@@ -1,10 +1,8 @@
-
-use crossterm::event::{self, KeyCode, KeyEventKind};
 use ratatui::{
-    layout::{Constraint, Direction, Layout, Position, Rect},
+    layout::{Position, Rect},
     style::{Color, Style},
     widgets::{Block, Clear, Paragraph},
-    DefaultTerminal, Frame,
+    Frame,
 };
 
 use crate::event_handling::event_handling::{EventHandling, Handling};

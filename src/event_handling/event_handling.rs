@@ -106,18 +106,28 @@ impl EventHandling {
                 match key.code {
                     KeyCode::Esc => self.handling = Handling::HandleTask,
                     KeyCode::Enter => {
-                        let _ = oper.update_db(category.name.clone(), TaskList {
-                            tasks: category.task_list.clone_tasks(),
-                            state: ListState::default()
-                        });
-                        oper.update_state_variable(all_category.get_current_name(),category).unwrap();
-                        self.handling = Handling::HandleTask;
+                        match all_category.get_current_name() {
+                            Some(name) => {
+                                let _ = oper.update_db(category.name.clone(), TaskList {
+                                    tasks: category.task_list.clone_tasks(),
+                                    state: ListState::default()
+                                });
+                                oper.update_state_variable(name, category).unwrap();
+                                self.handling = Handling::HandleTask;
+                            },
+                            None => {}
+                        }
                     },
                     KeyCode::Char('j') => all_category.select_next(),
                     KeyCode::Char('k') => all_category.select_previous(),
                     KeyCode::Char('d') => {
-                        let _ = oper.delete_category(all_category.get_current_name());
-                        all_category.delete_category();
+                        match all_category.get_current_name() {
+                            Some(name) => {
+                                let _ = oper.delete_category(name);
+                                all_category.delete_category();
+                            },
+                            None => {}
+                        }
                     },
                     _ => {}
                 }

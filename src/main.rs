@@ -4,20 +4,16 @@ mod help;
 mod input;
 mod event_handling;
 mod db;
-use std::time::Duration;
 use std::io;
-use std::thread::sleep;
 use category::category::AllCategory;
 use ratatui::prelude::*;
 use ratatui::widgets::ListState;
-use ratatui::{
-    crossterm::event::{self, KeyCode, KeyEventKind},
-    DefaultTerminal,
-};
+use ratatui::DefaultTerminal;
 
 use crate::{
     category::category::Category,
-    task::task::{TaskList, Task, Status}, help::help::Help,
+    task::task::TaskList,
+    help::help::Help,
     input::input::Input,
     event_handling::event_handling::{EventHandling, Handling},
     db::db::connection,
