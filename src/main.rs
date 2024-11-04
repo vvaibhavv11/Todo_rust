@@ -33,7 +33,7 @@ fn main() -> io::Result<()> {
     let mut category = Category {
         name: data.1,
         task_list: TaskList {
-            tasks: serde_json::from_str(&data.2).unwrap(),
+            tasks: serde_json::from_str(&data.2).unwrap_or(vec![]),
             state: ListState::default()
         }
     };

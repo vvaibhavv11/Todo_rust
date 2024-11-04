@@ -37,7 +37,13 @@ impl EventHandling {
                         });
                         Some(Ok(()))
                     },
-                    KeyCode::Char('a') => {self.handling = Handling::HandleAddTask; None},
+                    KeyCode::Char('a') => {
+                        if name == "".to_string() {
+                            return None;
+                        }
+                        self.handling = Handling::HandleAddTask;
+                        None
+                    },
                     KeyCode::Char('A') => {self.handling = Handling::HandleAddCategory; None},
                     KeyCode::Char('c') => {self.handling = Handling::HandleDeleteAndChangeCategory; None},
                     KeyCode::Char('j') => {tasklist.select_next(); None},
@@ -104,7 +110,7 @@ impl EventHandling {
                             tasks: category.task_list.clone_tasks(),
                             state: ListState::default()
                         });
-                        let _ = oper.update_state_variable(all_category.get_current_name(), category);
+                        oper.update_state_variable(all_category.get_current_name(),category).unwrap();
                         self.handling = Handling::HandleTask;
                     },
                     KeyCode::Char('j') => all_category.select_next(),

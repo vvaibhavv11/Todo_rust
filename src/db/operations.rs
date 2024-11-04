@@ -1,3 +1,4 @@
+use ratatui::widgets::ListState;
 use rusqlite::{params, Connection, OptionalExtension, Result};
 
 use crate::{
@@ -17,7 +18,7 @@ impl Operation {
     pub fn create_table(&mut self) -> Result<()> {
         self.conn.execute("CREATE TABLE IF NOT EXISTS todos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            category TEXT NOT NULL DEFAULT 'default',
+            category TEXT NOT NULL,
             tasklist TEXT
         )", ())?;
         Ok(())
@@ -28,16 +29,21 @@ impl Operation {
         let entry = stmt.query_row([], |row| {
             let id: i32 = row.get(0)?;
             let category: String = row.get(1)?;
-            let tasklist: String = row.get(2)?;
+            let tasklist: String = row.get(2).unwrap_or("".to_string());
             Ok((id, category, tasklist))
-        })?;
-        Ok(Some(entry))
+        }).optional()?;
+        match entry {
+            Some(data) => Ok(Some(data)),
+            None => Ok(Some((0, "".to_string(), "".to_string())))
+        }
     }
 
     pub fn add_category(&mut self, name: String) -> Result<()> {
+        let vec: Vec<String> = vec![];
+        let empty_vec = serde_json::to_string(&vec).unwrap();
         self.conn.execute(
-            "INSERT INTO todos (category) VALUES (?1)",
-            params![name],
+            "INSERT INTO todos (category, tasklist) VALUES (?1, ?2)",
+            params![name, empty_vec],
         )?;
         Ok(())
     }
@@ -51,7 +57,7 @@ impl Operation {
     }
 
     pub fn update_db(&mut self,name: String, task_list: TaskList) -> Result<()> {
-        let tasklist = serde_json::to_string(&task_list);
+        let tasklist = serde_json::to_string(&task_list.tasks);
         self.conn.execute(
             "UPDATE todos SET tasklist = ?1 WHERE category = ?2",
             params![tasklist.unwrap(), name],
@@ -75,9 +81,10 @@ impl Operation {
         let tasklist: Option<String> = stmt.query_row(params![name], |row| {
             row.get(0)
         }).optional()?;
-        let ctasklist = serde_json::from_str(&tasklist.unwrap()).unwrap();
+        let ctasklist = serde_json::from_str(&tasklist.unwrap()).unwrap_or(vec![]);
         category.name = name;
-        category.task_list = ctasklist;
+        category.task_list.tasks = ctasklist;
+        category.task_list.state = ListState::default();
         Ok(())
     }
 }
