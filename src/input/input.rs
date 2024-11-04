@@ -12,63 +12,18 @@ use crate::event_handling::event_handling::{EventHandling, Handling};
 pub struct Input {
     pub input: String,
     pub character_index: usize,
-    pub messages: String,
+    pub messages: String
 }
 
 
 impl Input {
-    // pub fn view(&mut self, t: &mut DefaultTerminal, ) {
-    //     match self.is_visible {
-    //         Visible::No => {},
-    //         Visible::Yes => {
-    //             loop {
-    //                 let _ = t.draw(|frame| {
-    //                     let chunks = Layout::default()
-    //                         .direction(Direction::Vertical)
-    //                         .constraints([
-    //                             Constraint::Length(3),
-    //                             Constraint::Min(1),
-    //                             Constraint::Length(3),
-    //                         ])
-    //                         .split(frame.area());
-    //                     let new_chunk = Rect::new( chunks[1].width / 4, chunks[1].height / 3, chunks[1].width / 2, chunks[1].height / 3,);
-    //                     frame.render_widget(Clear, new_chunk);
-    //                     frame.render_widget(
-    //                         Paragraph::new(self.input.as_str())
-    //                         .style(Style::default().fg(Color::Yellow))
-    //                         .block(Block::bordered().title("add task")),
-    //                         new_chunk,
-    //                     );
-    //                     #[allow(clippy::cast_possible_truncation)]
-    //                     frame.set_cursor_position(Position::new(
-    //                             new_chunk.x + self.character_index as u16 + 1,
-    //                             new_chunk.y + 1,
-    //                     ));
-    //                 });
-    //                 if let event::Event::Key(key) = event::read().unwrap() {
-    //                     if key.kind == KeyEventKind::Press {
-    //                         match key.code {
-    //                             KeyCode::Enter => self.submit_message(),
-    //                             KeyCode::Char(to_insert) => self.enter_char(to_insert),
-    //                             KeyCode::Backspace => self.delete_char(),
-    //                             KeyCode::Left => self.move_cursor_left(),
-    //                             KeyCode::Right => self.move_cursor_right(),
-    //                             KeyCode::Esc => {self.is_visible = Visible::No; break;},
-    //                             _ => {},
-    //                         }
-    //                     }
-    //                 } 
-    //             }
-    //         }
-    //     }
-    // }
-
     pub fn view(&mut self, eventhandling: &EventHandling, frame: &mut Frame, chunk: Rect) {
         let new_chunk = Rect::new( chunk.width / 4, chunk.height / 3, chunk.width / 2, chunk.height / 3);
         match eventhandling.handling {
-            Handling::ViewAddTask => self.render_input(frame, new_chunk, "add task".to_string()),
-            Handling::ViewAddCategory => self.render_input(frame, new_chunk, "add category".to_string()),
-            Handling::ViewTask => {},
+            Handling::HandleAddTask => self.render_input(frame, new_chunk, "Add Task".to_string()),
+            Handling::HandleAddCategory => self.render_input(frame, new_chunk, "Add Category".to_string()),
+            Handling::HandleDeleteAndChangeCategory => {},
+            Handling::HandleTask => {}
         }
     }
 

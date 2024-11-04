@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 use ratatui::{
     layout::{Alignment, Rect},
     text::Line,
@@ -9,54 +10,48 @@ use ratatui::{
 const TODO_FG_COLOR: Color = SLATE.c200;
 const COMPLETED_TODO_FG_COLOR: Color = GREEN.c500;
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Serialize, Deserialize)]
 pub enum Status {
     Todo,
-    Completed,
+    Completed
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct Task {
     pub message: String,
-    pub status: Status,
+    pub status: Status
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct TaskList {
     pub tasks: Vec<Task>,
-    pub state: ListState,
+    #[serde(skip)]
+    pub state: ListState
 }
 
 impl Task {
     fn new_task(todo: String) -> Self {
         Self {
             message: todo,
-            status: Status::Todo,
+            status: Status::Todo
         }
     }
 
     fn new_completed_task(todo: String) -> Self {
         Self {
             message: todo,
-            status: Status::Completed,
+            status: Status::Completed
         }
     }
 }
 
 impl TaskList {
-    // pub fn view(&self, frame: &mut Frame, chunk: Rect) {
-    //     for (i, task) in self.tasks.iter().enumerate() {
-    //         let area = Rect::new(chunk.x, chunk.y + i as u16, chunk.width, chunk.height);
-    //         frame.render_widget(
-    //             Paragraph::new(format!("{}", &task.message)),
-    //             area
-    //         )
-    //     }
-    // }
     pub fn view(&mut self, frame: &mut Frame, chunk: Rect) {
         self.format_tasks();
         let task: Vec<ListItem> = self.tasks.iter().map(|t| {
             let line = match t.status {
                 Status::Todo => Line::styled(format!(" ☐ {}", t.message.clone()), TODO_FG_COLOR),
-                Status::Completed =>  Line::styled(format!(" ✓ {}", t.message.clone()), COMPLETED_TODO_FG_COLOR),
+                Status::Completed =>  Line::styled(format!(" ✓ {}", t.message.clone()), COMPLETED_TODO_FG_COLOR)
             };
 
             ListItem::new(line)
@@ -76,7 +71,7 @@ impl TaskList {
         if let Some(i) = self.state.selected() {
             self.tasks[i].status = match self.tasks[i].status {
                 Status::Completed => Status::Todo,
-                Status::Todo => Status::Completed,
+                Status::Todo => Status::Completed
             }
         }
     }
@@ -108,7 +103,7 @@ impl TaskList {
         }
     }
 
-    fn clone_tasks(&mut self) -> Vec<Task> {
+    pub fn clone_tasks(&mut self) -> Vec<Task> {
         let cself: Vec<Task> = self.tasks.iter().map(|t| {
             match t.status {
                 Status::Todo => Task::new_task(t.message.clone()),
