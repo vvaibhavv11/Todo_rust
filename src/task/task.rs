@@ -127,7 +127,11 @@ impl TaskList {
 
     pub fn select_last(&mut self) {
         self.state.select_last();
-    } 
+    }
+
+    pub fn select_none(&mut self) {
+        self.state.select(None);
+    }
 
     pub fn update(&mut self, message: String) {
         if message == "".to_string() {

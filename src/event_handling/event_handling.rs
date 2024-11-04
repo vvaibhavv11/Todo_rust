@@ -41,11 +41,20 @@ impl EventHandling {
                         if name == "".to_string() {
                             return None;
                         }
+                        tasklist.select_none();
                         self.handling = Handling::HandleAddTask;
                         None
                     },
-                    KeyCode::Char('A') => {self.handling = Handling::HandleAddCategory; None},
-                    KeyCode::Char('c') => {self.handling = Handling::HandleDeleteAndChangeCategory; None},
+                    KeyCode::Char('A') => {
+                        tasklist.select_none();
+                        self.handling = Handling::HandleAddCategory;
+                        None
+                    },
+                    KeyCode::Char('c') => {
+                        tasklist.select_none();
+                        self.handling = Handling::HandleDeleteAndChangeCategory;
+                        None
+                    },
                     KeyCode::Char('j') => {tasklist.select_next(); None},
                     KeyCode::Char('l') => {tasklist.toggle_status(); None},
                     KeyCode::Char('k') => {tasklist.select_previous(); None},
