@@ -69,7 +69,7 @@ fn run(mut terminal: DefaultTerminal, oper: &mut Operation, category: &mut Categ
                 if let Some(result) = event_handle.handle_task(category.name.clone(), oper, &mut category.task_list) {
                     return Ok(result?);
                 }
-            } 
+            }
             Handling::HandleAddTask => event_handle.handle_add_task(&mut input, &mut category.task_list),
             Handling::HandleAddCategory => event_handle.handle_add_category(&mut input, &mut all_categorys, oper),
             Handling::HandleDeleteAndChangeCategory => event_handle.handle_delete_change_category(category, &mut all_categorys, oper),

@@ -30,8 +30,9 @@ impl AllCategory {
         frame.render_widget(Clear, chunk);
         frame.render_stateful_widget(
             List::new(self.names.clone())
+                .style(Style::default().fg(Color::Gray).bold())
                 .block(Block::default().title_alignment(Alignment::Center).title("All Category").borders(Borders::all()))
-                .highlight_style(Style::new().bg(Color::Cyan).bold())
+                .highlight_style(Style::new().bg(Color::LightRed).bold())
                 .highlight_symbol(">")
                 .direction(ListDirection::TopToBottom),
             chunk,

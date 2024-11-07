@@ -58,8 +58,9 @@ impl TaskList {
         }).collect();
         frame.render_stateful_widget(
             List::new(task)
+                .style(Style::default())
                 .block(Block::default().title_alignment(Alignment::Center).title("Todos").borders(Borders::all()))
-                .highlight_style(Style::new().bg(Color::Cyan).bold())
+                .highlight_style(Style::new().bg(Color::LightRed).bold())
                 .highlight_symbol(">")
                 .direction(ListDirection::TopToBottom),
             chunk,
